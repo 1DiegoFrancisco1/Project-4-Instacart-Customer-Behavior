@@ -1,32 +1,67 @@
-# 🛒 Instacart Customer Behavior — Cleaning & EDA (Sprint 4)
+# 🛒 Instacart Customer Behavior — Cleaning & Exploratory Data Analysis (Sprint 4)
 
-**Goal:** Clean and analyze Instacart order data to understand customer shopping habits (time of day, day of week, reorder behavior, basket size) and communicate insights with clear visuals.
-
----
-
-## 📦 Dataset (5 Tables)
-
-- `instacart_orders.csv` — orders (one row per order)  
-- `products.csv` — product catalog  
-- `order_products.csv` — line items (products within each order)  
-- `aisles.csv` — aisle dictionary  
-- `departments.csv` — department dictionary  
-
-### Key Fields
-- `order_id`, `user_id`, `order_number`, `order_dow (0–6)`, `order_hour_of_day (0–23)`, `days_since_prior_order`
-- `product_id`, `product_name`, `aisle_id`, `department_id`
-- `add_to_cart_order`, `reordered (0/1)`
-
-> 💡 This dataset is a curated version of the 2017 Instacart Kaggle dataset. It includes intentional **missing values** and **duplicates** to practice data cleaning.
+## 🧭 Project Overview
+This project explores **Instacart customer shopping behavior** using a real-world dataset originally released for a Kaggle competition (2017).  
+As a data analyst, your goal is to **clean, explore, and visualize** Instacart order data to uncover patterns in purchase times, frequency, and reorder behavior.
 
 ---
 
-## 🧭 Project Tasks
+## 🎯 Objectives
+You will:
+- Load and clean multiple related tables.
+- Handle missing values, duplicates, and data type issues.
+- Explore customer behavior patterns such as:
+  - Time of day and day of week of orders.
+  - Time between consecutive purchases.
+  - Most popular and most frequently reordered products.
+  - Items most often added first to a cart.
+- Present findings visually using clear, labeled plots.
 
-### 1️⃣ Load & Inspect
-- Read all CSVs carefully (check delimiters and encoding if necessary).  
-- Explore dataset shapes, dtypes, and missing values.  
-- Use `info(show_counts=True)` for large DataFrames.  
+---
+
+## 📦 Dataset Description
+The dataset consists of **five CSV tables**, each representing a different layer of Instacart’s transactional data:
+
+| File | Description |
+|------|--------------|
+| `instacart_orders.csv` | Each row corresponds to a unique order. |
+| `products.csv` | Product catalog with category IDs. |
+| `order_products.csv` | Line items (products included in each order). |
+| `aisles.csv` | Mapping of `aisle_id` to aisle names. |
+| `departments.csv` | Mapping of `department_id` to department names. |
+
+### 🗂️ Key Columns
+
+#### instacart_orders.csv
+- `order_id`: Unique order identifier  
+- `user_id`: Unique customer identifier  
+- `order_number`: Number of orders the customer has placed  
+- `order_dow`: Day of the week (0 = Sunday)  
+- `order_hour_of_day`: Hour the order was placed (0–23)  
+- `days_since_prior_order`: Days since the previous order  
+
+#### products.csv
+- `product_id`: Unique product identifier  
+- `product_name`: Product name  
+- `aisle_id`: Aisle category  
+- `department_id`: Department category  
+
+#### order_products.csv
+- `order_id`: Order identifier  
+- `product_id`: Product identifier  
+- `add_to_cart_order`: Sequential order items were added to the cart  
+- `reordered`: 0 = first time, 1 = product was reordered  
+
+---
+
+## ⚙️ Step-by-Step Workflow
+
+### 🧩 Step 1 – Load & Inspect the Data
+Load all five CSVs with `pandas.read_csv()` and check:
+- File shapes  
+- Missing values  
+- Data types (`int`, `float`, `object`)  
+- Non-standard delimiters if necessary  
 
 ```python
 import pandas as pd
