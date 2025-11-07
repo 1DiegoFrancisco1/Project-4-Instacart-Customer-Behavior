@@ -81,11 +81,28 @@ This project uses five tables derived from Instacart’s public Kaggle dataset (
 ---
 
 ## 🧠 Business Takeaways
-- **Timing**: Marketing pushes align with **peak hours**/**days** (identified above).  
-- **Replenishables**: High **reorder rates** flag items suited for **subscriptions**/“buy again” nudges.  
-- **Merchandising**: **First-in-cart** products are prime candidates for **hero placement** or **bundles**.  
-- **Retention**: Users with short reorder intervals are responsive—target with **cross-sell** near predicted reorder day.
+Our initial goal was to identify purchasing patterns in Instacart’s customer base.
+We began by loading and cleaning the data to enable reliable exploratory analysis.
 
+We worked with five interconnected tables (orders, products, aisles, departments, and order_products), normalizing data types, filling or removing missing values, and eliminating duplicates to ensure data integrity.
+
+From our analysis, we uncovered key patterns such as peak activity occurring mid-morning and Sundays and Mondays being the most active shopping days.
+The interval between orders ranged from 1 day (first order) up to 30 days.
+
+Customer behavior was highly skewed, with most customers placing few orders and a small segment making many.
+On average, nearly 50% of items ordered were reorders.
+
+We also identified the top 20 most popular items, the most frequently reordered products, those added first to the cart, and the most common items in large baskets.
+
+These insights can guide data-driven business strategies, such as:
+
+Smart reorder notifications.
+
+Promotions during off-peak hours.
+
+UX improvements tailored to habitual purchase patterns.
+
+Overall, this analysis helps Instacart improve retention, leverage customer loyalty, and optimize marketing campaigns based on real user behavior.
 ## ▶️ How to Run
 ```bash
 # 1) Create env and install basics
