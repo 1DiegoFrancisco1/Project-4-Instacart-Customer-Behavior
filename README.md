@@ -103,10 +103,3 @@ Promotions during off-peak hours.
 UX improvements tailored to habitual purchase patterns.
 
 Overall, this analysis helps Instacart improve retention, leverage customer loyalty, and optimize marketing campaigns based on real user behavior.
-## ▶️ How to Run
-```bash
-# 1) Create env and install basics
-pip install pandas numpy matplotlib seaborn jupyter
-
-# 2) Launch notebook
-jupyter notebook "Project 4.ipynb"
