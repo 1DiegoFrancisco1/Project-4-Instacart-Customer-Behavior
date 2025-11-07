@@ -1,76 +1,95 @@
-# 🛒 Instacart Customer Behavior — Cleaning & Exploratory Data Analysis (Sprint 4)
+# 🛒 Project 4 — Instacart Customer Behavior Analysis
 
-## 🧭 Project Overview
-This project explores **Instacart customer shopping behavior** using a real-world dataset originally released for a Kaggle competition (2017).  
-As a data analyst, your goal is to **clean, explore, and visualize** Instacart order data to uncover patterns in purchase times, frequency, and reorder behavior.
-
----
+Analyze Instacart orders to understand **when** customers shop, **what** they buy, and **how often** they reorder.  
+This project focuses on **data cleaning**, **EDA**, and clear **visual storytelling**.
 
 ## 🎯 Objectives
-You will:
-- Load and clean multiple related tables.
-- Handle missing values, duplicates, and data type issues.
-- Explore customer behavior patterns such as:
-  - Time of day and day of week of orders.
-  - Time between consecutive purchases.
-  - Most popular and most frequently reordered products.
-  - Items most often added first to a cart.
-- Present findings visually using clear, labeled plots.
+1) Preprocess 5 related tables (fix dtypes, handle missing values/duplicates).  
+2) Validate time fields and visualize shopping patterns.  
+3) Explore order sizes, reorders, and “first-in-cart” behavior.  
+4) Deliver business-ready insights supported by charts.
 
 ---
 
-## 📦 Dataset Description
-The dataset consists of **five CSV tables**, each representing a different layer of Instacart’s transactional data:
+## 📂 Data
+This project uses five tables derived from Instacart’s public Kaggle dataset (trimmed and with synthetic NA/dupes):
 
-| File | Description |
-|------|--------------|
-| `instacart_orders.csv` | Each row corresponds to a unique order. |
-| `products.csv` | Product catalog with category IDs. |
-| `order_products.csv` | Line items (products included in each order). |
-| `aisles.csv` | Mapping of `aisle_id` to aisle names. |
-| `departments.csv` | Mapping of `department_id` to department names. |
+- `orders` — order-level info (`order_id`, `user_id`, `order_dow`, `order_hour_of_day`, `days_since_prior_order`, …)
+- `order_products__prior` — products per **prior** order (`order_id`, `product_id`, `add_to_cart_order`, `reordered`)
+- `order_products__train` — products per **train** order (same schema as prior)
+- `products` — `product_id`, `product_name`, `aisle_id`, `department_id`
+- `aisles` / `departments` — lookup tables
 
-### 🗂️ Key Columns
-
-#### instacart_orders.csv
-- `order_id`: Unique order identifier  
-- `user_id`: Unique customer identifier  
-- `order_number`: Number of orders the customer has placed  
-- `order_dow`: Day of the week (0 = Sunday)  
-- `order_hour_of_day`: Hour the order was placed (0–23)  
-- `days_since_prior_order`: Days since the previous order  
-
-#### products.csv
-- `product_id`: Unique product identifier  
-- `product_name`: Product name  
-- `aisle_id`: Aisle category  
-- `department_id`: Department category  
-
-#### order_products.csv
-- `order_id`: Order identifier  
-- `product_id`: Product identifier  
-- `add_to_cart_order`: Sequential order items were added to the cart  
-- `reordered`: 0 = first time, 1 = product was reordered  
+> All results/plots are produced in the Jupyter notebook: **`Project 4.ipynb`**.
 
 ---
 
-## ⚙️ Step-by-Step Workflow
+## 🧹 Step 2 — Preprocessing Summary
+- **Dtypes**: Casted IDs to `int`, time fields to `int`, ensured booleans where appropriate (`reordered` → `int`/`bool`).
+- **Missing values**:
+  - `days_since_prior_order`: imputed (e.g., with median or left NA for first orders — decision documented in notebook).
+  - Lookups (`product_name`, `aisle`, `department`): dropped rows only if key info missing and non-recoverable.
+- **Duplicates**:
+  - Removed exact duplicates in order-product tables.
+  - Verified uniqueness constraints (`order_id` + `product_id`).
+- **Integrity checks**:
+  - `order_hour_of_day` within **0–23** ✅
+  - `order_dow` within **0–6** ✅
 
-### 🧩 Step 1 – Load & Inspect the Data
-Load all five CSVs with `pandas.read_csv()` and check:
-- File shapes  
-- Missing values  
-- Data types (`int`, `float`, `object`)  
-- Non-standard delimiters if necessary  
+> Rationale: preserve realistic distributions, avoid target leakage, document each decision (see notebook cells).
 
-```python
-import pandas as pd
+---
 
-orders       = pd.read_csv('/datasets/instacart_orders.csv')
-products     = pd.read_csv('/datasets/products.csv')
-aisles       = pd.read_csv('/datasets/aisles.csv')
-departments  = pd.read_csv('/datasets/departments.csv')
-order_items  = pd.read_csv('/datasets/order_products.csv')
+## 📊 Step 3A — Core Time Patterns
+- **Orders by hour**: Line/area chart of `order_hour_of_day` → peak shopping times.  
+- **Orders by weekday**: Bar chart of `order_dow` → which days are busiest.  
+- **Time to next order**: Histogram of `days_since_prior_order` → min/max and mode(s).
 
-orders.info(show_counts=True)
-order_items.info(show_counts=True)
+**Key observations (fill with your findings):**
+- Peak hour(s): **…**  
+- Busiest day(s): **…**  
+- Typical reorder interval: **…** days; min: **…**, max: **…**
+
+---
+
+## 📊 Step 3B — User & Product Distributions
+- **Hour distribution: Wed vs Sat**: overlapped histograms; note shifts in usage patterns.  
+- **Orders per customer**: distribution of total order count by `user_id`.  
+- **Top-20 most ordered products**: join `order_products*` → `products`; list `product_id` + `product_name`.
+
+**Highlights (fill):**
+- Wednesday vs Saturday: **…**  
+- Heavy/Light shoppers: **…**  
+- Top products: **…** (IDs + names shown in notebook table)
+
+---
+
+## 📊 Step 3C — Basket Size & Reorder Dynamics
+- **Items per order**: distribution of `count(product_id)` per `order_id`.  
+- **Top-20 most re-ordered items**: rank by times `reordered==1`.  
+- **Product-level reorder ratio**:  
+  `reorder_rate = (# times product reordered) / (# times product ordered)`  
+  Output table: `product_id`, `product_name`, `reorder_rate`.
+- **Customer-level reorder ratio**: share of a user’s items that are reorders.  
+- **First-in-cart Top-20**: rank by `add_to_cart_order == 1` counts.
+
+**Insights (fill):**
+- Median basket size: **…** items.  
+- Products with highest reorder rates: **…**  
+- First-in-cart favorites: **…** (IDs + names)
+
+---
+
+## 🧠 Business Takeaways
+- **Timing**: Marketing pushes align with **peak hours**/**days** (identified above).  
+- **Replenishables**: High **reorder rates** flag items suited for **subscriptions**/“buy again” nudges.  
+- **Merchandising**: **First-in-cart** products are prime candidates for **hero placement** or **bundles**.  
+- **Retention**: Users with short reorder intervals are responsive—target with **cross-sell** near predicted reorder day.
+
+## ▶️ How to Run
+```bash
+# 1) Create env and install basics
+pip install pandas numpy matplotlib seaborn jupyter
+
+# 2) Launch notebook
+jupyter notebook "Project 4.ipynb"
